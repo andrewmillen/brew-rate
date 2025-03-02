@@ -294,24 +294,28 @@ const AnalysisDialog = ({ isOpen, onClose, entries }) => {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-        <div className="p-6">
-          <h2 className="text-xl font-bold mb-4">Coffee Preference Analysis</h2>
-          <div className="whitespace-pre-line">
-            {analysis?.message || "No analysis available"}
+    <Dialog open={isOpen} onClose={onClose} className="relative z-50">
+      <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-black bg-opacity-50">
+        <DialogPanel className="bg-white rounded-lg overflow-hidden shadow-xl max-w-lg w-full mx-4 relative">
+          <div className="p-6">
+            <DialogTitle className="text-xl font-semibold mb-4">
+              Coffee Preference Analysis
+            </DialogTitle>
+            <div className="whitespace-pre-line h-full max-h-96 overflow-y-auto">
+              {analysis?.message || "No analysis available"}
+            </div>
           </div>
-        </div>
-        <div className="border-t border-gray-200 flex justify-end sticky bottom-0 bg-white p-4">
-          <Button
-            onClick={onClose}
-            className="px-4 py-2 font-medium text-gray-700 border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:border-gray-400"
-          >
-            Dismiss
-          </Button>
-        </div>
+          <div className="border-t border-gray-200 flex justify-end sticky bottom-0 bg-white p-4">
+            <Button
+              onClick={onClose}
+              className="px-4 py-2 font-medium text-gray-700 border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:border-gray-400"
+            >
+              Dismiss
+            </Button>
+          </div>
+        </DialogPanel>
       </div>
-    </div>
+    </Dialog>
   );
 };
 
