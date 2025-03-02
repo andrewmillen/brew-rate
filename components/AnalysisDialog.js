@@ -8,11 +8,13 @@ export default function DeleteConfirmation({ isOpen, onClose }) {
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-black bg-opacity-50">
         <DialogPanel className="bg-white p-6 rounded-lg shadow-xl max-w-3xl w-full mx-4">
           <DialogTitle className="text-xl font-semibold mb-4">
-            Coffee Preference Analysis
+            📊 Coffee Preference Analysis
           </DialogTitle>
-
-          {/*  */}
-
+          <p className="mb-4">
+            When you've added at least 3 entries, you can analyze your coffee
+            preferences. The analysis will identify your favorite regions,
+            roasters, and bean characteristics based on your ratings.
+          </p>
           <div className="flex justify-end space-x-3 pt-4">
             <Button
               onClick={onClose}
