@@ -107,7 +107,7 @@ export default function Home() {
       <Snackbar
         show={snackbar.show}
         message={snackbar.message}
-        onClose={() => setSnackbar({ show: false, message: "" })}
+        onClose={() => setSnackbar({ show: false, message: snackbar.message })}
       />
 
       <AnalysisDialog
