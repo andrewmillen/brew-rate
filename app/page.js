@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import AnalysisDialog from "@/components/AnalysisDialog";
 import BeanForm from "@/components/BeanForm";
 import BeanLog from "@/components/BeanLog";
 import { Button } from "@headlessui/react";
@@ -9,6 +10,7 @@ import Snackbar from "@/components/Snackbar";
 
 export default function Home() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [showAnalysis, setShowAnalysis] = useState(false);
   const [editingEntry, setEditingEntry] = useState(null);
   const [snackbar, setSnackbar] = useState({
     show: false,
@@ -40,6 +42,12 @@ export default function Home() {
       <div className="container mx-auto flex justify-between items-center px-6 py-16">
         <h1 className="text-3xl font-bold">☕️ Brew Rate</h1>
         <div className="flex items-center gap-3">
+          <Button
+            onClick={() => setShowAnalysis(true)}
+            className="px-4 py-2 font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:border-gray-400"
+          >
+            Analyze
+          </Button>
           <Button
             onClick={() => setIsDrawerOpen(true)}
             className="px-4 py-2 text-white border border-blue-800 rounded-md shadow-sm bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -81,6 +89,11 @@ export default function Home() {
         show={snackbar.show}
         message={snackbar.message}
         onClose={() => setSnackbar({ show: false, message: snackbar.message })}
+      />
+
+      <AnalysisDialog
+        isOpen={showAnalysis}
+        onClose={() => setShowAnalysis(false)}
       />
     </main>
   );

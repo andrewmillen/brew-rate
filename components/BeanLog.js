@@ -116,10 +116,6 @@ function BeanLog({ onEdit, onDelete }) {
     );
   };
 
-  const handleFormSuccess = () => {
-    fetchEntries();
-  };
-
   return (
     <div className="flex flex-col h-full border border-gray-200 shadow-sm mb-16 rounded overflow-hidden">
       {entries.length === 0 ? (
