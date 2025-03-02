@@ -9,6 +9,18 @@ const AnalysisDialog = ({ isOpen, onClose, entries }) => {
     entriesLength: entries?.length,
   });
 
+  const [analysis, setAnalysis] = useState({
+    canAnalyze: false,
+    message: "Analyzing your coffee preferences...",
+  });
+
+  useEffect(() => {
+    if (isOpen) {
+      const result = analyzeEntries();
+      setAnalysis(result);
+    }
+  }, [entries, isOpen]);
+
   const analyzeEntries = () => {
     try {
       if (!entries || entries.length < 3) {
@@ -281,17 +293,6 @@ const AnalysisDialog = ({ isOpen, onClose, entries }) => {
   };
 
   if (!isOpen) return null;
-
-  let analysis;
-  try {
-    analysis = analyzeEntries();
-  } catch (error) {
-    console.error("Error calling analyzeEntries:", error);
-    analysis = {
-      canAnalyze: false,
-      message: "An error occurred while analyzing your coffee preferences.",
-    };
-  }
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
