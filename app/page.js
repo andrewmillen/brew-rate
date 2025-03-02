@@ -5,10 +5,15 @@ import { useEffect, useState } from "react";
 import BeanForm from "@/components/BeanForm";
 import BeanLog from "@/components/BeanLog";
 import { Button } from "@headlessui/react";
+import Snackbar from "@/components/Snackbar";
 
 export default function Home() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [editingEntry, setEditingEntry] = useState(null);
+  const [snackbar, setSnackbar] = useState({
+    show: false,
+    message: "",
+  });
 
   useEffect(() => {
     const handleOpenForm = () => setIsDrawerOpen(true);
@@ -26,6 +31,10 @@ export default function Home() {
     setEditingEntry(null);
   };
 
+  const showSnackbar = (message) => {
+    setSnackbar({ show: true, message });
+  };
+
   return (
     <main>
       <div className="container mx-auto flex justify-between items-center px-8 py-16">
@@ -39,17 +48,18 @@ export default function Home() {
       </div>
 
       <div className="container mx-auto">
-        <BeanLog onEdit={handleEdit} />
+        <BeanLog
+          onEdit={handleEdit}
+          onDelete={() => showSnackbar("Entry deleted")}
+        />
       </div>
+
       {isDrawerOpen && (
         <>
-          {/* Overlay */}
           <div
             className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
             onClick={handleCloseDrawer}
           />
-
-          {/* Drawer */}
           <div className="fixed inset-y-0 right-0 w-96 bg-white shadow-lg transform transition-transform">
             <BeanForm
               initialData={editingEntry}
@@ -57,13 +67,19 @@ export default function Home() {
               onClose={handleCloseDrawer}
               onSubmitSuccess={() => {
                 handleCloseDrawer();
-                // Get reference to BeanLog's refresh function
                 window.dispatchEvent(new Event("refreshEntries"));
+                showSnackbar(editingEntry ? "Entry updated" : "Entry added");
               }}
             />
           </div>
         </>
       )}
+
+      <Snackbar
+        show={snackbar.show}
+        message={snackbar.message}
+        onClose={() => setSnackbar({ show: false, message: snackbar.message })}
+      />
     </main>
   );
 }

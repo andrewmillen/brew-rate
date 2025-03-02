@@ -13,7 +13,7 @@ import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import EmptyState from "@/components/EmptyState";
 import StarRating from "@/components/StarRating";
 
-function BeanLog({ onEdit }) {
+function BeanLog({ onEdit, onDelete }) {
   const [entries, setEntries] = useState([]);
   const [sortConfig, setSortConfig] = useState({
     key: "date",
@@ -73,6 +73,7 @@ function BeanLog({ onEdit }) {
 
       await fetchEntries();
       setDeleteModal({ isOpen: false, entryToDelete: null });
+      onDelete?.();
     } catch (error) {
       console.error("Error deleting entry:", error);
     }
