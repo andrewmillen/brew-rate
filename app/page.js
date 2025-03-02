@@ -39,12 +39,14 @@ export default function Home() {
     <main>
       <div className="container mx-auto flex justify-between items-center px-6 py-16">
         <h1 className="text-3xl font-bold">☕️ Brew Rate</h1>
-        <Button
-          onClick={() => setIsDrawerOpen(true)}
-          className="px-4 py-2 text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-        >
-          Add Bean
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button
+            onClick={() => setIsDrawerOpen(true)}
+            className="px-4 py-2 text-white border border-blue-800 rounded-md shadow-sm bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Add Bean
+          </Button>
+        </div>
       </div>
 
       <div className="container mx-auto">

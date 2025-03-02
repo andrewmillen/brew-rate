@@ -179,17 +179,17 @@ function BeanLog({ onEdit, onDelete }) {
                       </PopoverButton>
                       <PopoverPanel
                         anchor="bottom end"
-                        className="flex flex-col items-end py-1 bg-white rounded border border-gray-200 shadow-md w-40"
+                        className="flex flex-col mt-2 items-end py-1 bg-white rounded border border-gray-200 shadow-md w-40"
                       >
                         <Button
                           onClick={() => onEdit(entry)}
-                          className="py-2 px-3 text-sm bg-white hover:bg-gray-50 w-full text-left"
+                          className="py-2 px-3 bg-white hover:bg-gray-50 w-full text-left"
                         >
                           Edit
                         </Button>
                         <Button
                           onClick={() => handleDelete(entry)}
-                          className="py-2 px-3 text-sm bg-white hover:bg-gray-50 w-full text-left text-red-600"
+                          className="py-2 px-3 bg-white hover:bg-gray-50 w-full text-left text-red-600"
                         >
                           Delete
                         </Button>

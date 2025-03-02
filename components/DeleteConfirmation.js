@@ -33,7 +33,7 @@ export default function DeleteConfirmation({
             </Button>
             <Button
               onClick={onConfirm}
-              className="px-4 py-2 text-white bg-red-600 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="px-4 py-2 text-white border border-red-800 rounded-md shadow-sm bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Delete
             </Button>
