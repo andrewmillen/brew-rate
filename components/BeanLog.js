@@ -6,15 +6,14 @@ import {
   PopoverButton,
   PopoverPanel,
 } from "@headlessui/react";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 import DeleteConfirmation from "@/components/DeleteConfirmation";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import EmptyState from "@/components/EmptyState";
 import StarRating from "@/components/StarRating";
 
-function BeanLog({ onEdit, onDelete }) {
-  const [entries, setEntries] = useState([]);
+export default function BeanLog({ entries, onEdit, onDelete }) {
   const [sortConfig, setSortConfig] = useState({
     key: "date",
     direction: "desc",
@@ -24,41 +23,27 @@ function BeanLog({ onEdit, onDelete }) {
     entryToDelete: null,
   });
 
-  const fetchEntries = async () => {
-    const response = await fetch("/api/entries");
-    const data = await response.json();
-    setEntries(data);
-  };
+  const sortedEntries = useMemo(() => {
+    if (!entries) return [];
 
-  useEffect(() => {
-    fetchEntries();
-
-    // Add event listener for refreshing entries
-    const handleRefresh = () => fetchEntries();
-    window.addEventListener("refreshEntries", handleRefresh);
-
-    // Cleanup
-    return () => window.removeEventListener("refreshEntries", handleRefresh);
-  }, []);
-
-  const handleSort = (key) => {
-    setSortConfig((prevConfig) => ({
-      key,
-      direction:
-        prevConfig.key === key && prevConfig.direction === "asc"
-          ? "desc"
-          : "asc",
-    }));
-  };
-
-  const handleDelete = (entry) => {
-    setDeleteModal({
-      isOpen: true,
-      entryToDelete: entry,
-    });
-  };
+    const sortedData = [...entries];
+    if (sortConfig.key) {
+      sortedData.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === "asc" ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === "asc" ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortedData;
+  }, [entries, sortConfig]);
 
   const confirmDelete = async () => {
+    if (!deleteModal.entryToDelete) return;
+
     try {
       const response = await fetch(
         `/api/entries/${deleteModal.entryToDelete.id}`,
@@ -67,40 +52,29 @@ function BeanLog({ onEdit, onDelete }) {
         }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to delete entry");
-      }
+      if (!response.ok) throw new Error("Failed to delete entry");
 
-      await fetchEntries();
-      setDeleteModal({ isOpen: false, entryToDelete: null });
       onDelete?.();
+      setDeleteModal({ isOpen: false, entryToDelete: null });
     } catch (error) {
       console.error("Error deleting entry:", error);
     }
   };
-
-  const sortedEntries = [...entries].sort((a, b) => {
-    if (sortConfig.key === "date") {
-      return sortConfig.direction === "asc"
-        ? new Date(a.date) - new Date(b.date)
-        : new Date(b.date) - new Date(a.date);
-    }
-    if (sortConfig.key === "rating") {
-      return sortConfig.direction === "asc"
-        ? a.rating - b.rating
-        : b.rating - a.rating;
-    }
-    return sortConfig.direction === "asc"
-      ? a[sortConfig.key]?.localeCompare(b[sortConfig.key])
-      : b[sortConfig.key]?.localeCompare(a[sortConfig.key]);
-  });
 
   const renderSortableHeader = (key, label) => {
     const isActive = sortConfig.key === key;
     return (
       <th
         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer bg-gray-50 group"
-        onClick={() => handleSort(key)}
+        onClick={() =>
+          setSortConfig((prevConfig) => ({
+            key,
+            direction:
+              prevConfig.key === key && prevConfig.direction === "asc"
+                ? "desc"
+                : "asc",
+          }))
+        }
       >
         <div className="flex items-center space-x-1">
           <span>{label}</span>
@@ -184,7 +158,12 @@ function BeanLog({ onEdit, onDelete }) {
                           Edit
                         </Button>
                         <Button
-                          onClick={() => handleDelete(entry)}
+                          onClick={() =>
+                            setDeleteModal({
+                              isOpen: true,
+                              entryToDelete: entry,
+                            })
+                          }
                           className="py-2 px-3 bg-white hover:bg-gray-50 w-full text-left text-red-600"
                         >
                           Delete
@@ -208,5 +187,3 @@ function BeanLog({ onEdit, onDelete }) {
     </div>
   );
 }
-
-export default BeanLog;

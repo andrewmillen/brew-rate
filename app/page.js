@@ -10,17 +10,32 @@ import Snackbar from "@/components/Snackbar";
 
 export default function Home() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [showAnalysis, setShowAnalysis] = useState(false);
   const [editingEntry, setEditingEntry] = useState(null);
+  const [showAnalysis, setShowAnalysis] = useState(false);
+  const [entries, setEntries] = useState([]);
   const [snackbar, setSnackbar] = useState({
     show: false,
     message: "",
   });
 
+  const fetchEntries = async () => {
+    try {
+      const response = await fetch("/api/entries");
+      const data = await response.json();
+      setEntries(data);
+    } catch (error) {
+      console.error("Error fetching entries:", error);
+    }
+  };
+
   useEffect(() => {
-    const handleOpenForm = () => setIsDrawerOpen(true);
-    window.addEventListener("openBeanForm", handleOpenForm);
-    return () => window.removeEventListener("openBeanForm", handleOpenForm);
+    fetchEntries();
+  }, []);
+
+  useEffect(() => {
+    const handleRefresh = () => fetchEntries();
+    window.addEventListener("refreshEntries", handleRefresh);
+    return () => window.removeEventListener("refreshEntries", handleRefresh);
   }, []);
 
   const handleEdit = (entry) => {
@@ -59,8 +74,12 @@ export default function Home() {
 
       <div className="container mx-auto">
         <BeanLog
+          entries={entries}
           onEdit={handleEdit}
-          onDelete={() => showSnackbar("Entry deleted")}
+          onDelete={() => {
+            fetchEntries();
+            showSnackbar("Entry deleted");
+          }}
         />
       </div>
 
@@ -77,7 +96,7 @@ export default function Home() {
               onClose={handleCloseDrawer}
               onSubmitSuccess={() => {
                 handleCloseDrawer();
-                window.dispatchEvent(new Event("refreshEntries"));
+                fetchEntries();
                 showSnackbar(editingEntry ? "Entry updated" : "Entry added");
               }}
             />
@@ -88,12 +107,13 @@ export default function Home() {
       <Snackbar
         show={snackbar.show}
         message={snackbar.message}
-        onClose={() => setSnackbar({ show: false, message: snackbar.message })}
+        onClose={() => setSnackbar({ show: false, message: "" })}
       />
 
       <AnalysisDialog
         isOpen={showAnalysis}
         onClose={() => setShowAnalysis(false)}
+        entries={entries}
       />
     </main>
   );
