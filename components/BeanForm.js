@@ -81,7 +81,7 @@ function BeanForm({ onClose, onSubmitSuccess, initialData, isEditing }) {
         </h2>
         <Button
           onClick={onClose}
-          className="p-2 bg-white border border-gray-200 shadow-sm hover:bg-gray-100 focus:bg-gray-100 rounded-full focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-blue-500"
+          className="p-2 bg-white border border-white hover:shadow-sm hover:border-gray-300 focus:border-gray-300 focus:bg-gray-100 rounded-full focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-blue-500"
           aria-label="Close"
         >
           <XMarkIcon className="w-6 h-6" />
