@@ -28,7 +28,7 @@ export async function GET() {
       origin: "Kenya Nyeri",
       aroma: "Bright and fruity with blackberry notes",
       taste: "Complex with blackberry, currant, and a wine-like acidity",
-      rating: 5,
+      rating: 1,
       date: new Date("2024-03-13").toISOString(),
     },
     {
@@ -60,7 +60,7 @@ export async function GET() {
       origin: "Rwanda Gitesi",
       aroma: "Sweet and complex with stone fruit notes",
       taste: "Peach, apricot, and brown sugar with a creamy body",
-      rating: 4,
+      rating: 2,
       date: new Date("2024-03-09").toISOString(),
     },
     {
@@ -68,7 +68,7 @@ export async function GET() {
       origin: "Brazil Fazenda Alta Vista",
       aroma: "Nutty and sweet with milk chocolate notes",
       taste: "Smooth with hazelnut, milk chocolate, and subtle caramel",
-      rating: 3,
+      rating: 1,
       date: new Date("2024-03-08").toISOString(),
     },
     {
