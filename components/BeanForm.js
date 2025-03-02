@@ -42,22 +42,35 @@ function BeanForm({ onClose, onSubmitSuccess, initialData, isEditing }) {
       : "/api/entries";
     const method = isEditing ? "PUT" : "POST";
 
-    await fetch(endpoint, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ roaster, origin, aroma, taste, rating }),
-    });
+    try {
+      const response = await fetch(endpoint, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ roaster, origin, aroma, taste, rating }),
+      });
 
-    setRoaster("");
-    setOrigin("");
-    setAroma("");
-    setTaste("");
-    setRating(3);
-    router.refresh();
-    onSubmitSuccess?.();
-    onClose();
+      if (!response.ok) {
+        throw new Error("Failed to save entry");
+      }
+
+      // Reset form
+      setRoaster("");
+      setOrigin("");
+      setAroma("");
+      setTaste("");
+      setRating(3);
+
+      // Close form and notify parent
+      onSubmitSuccess?.();
+      onClose();
+
+      // Refresh the page after everything else is done
+      router.refresh();
+    } catch (error) {
+      console.error("Error saving entry:", error);
+    }
   };
 
   return (

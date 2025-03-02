@@ -32,6 +32,13 @@ function BeanLog({ onEdit }) {
 
   useEffect(() => {
     fetchEntries();
+
+    // Add event listener for refreshing entries
+    const handleRefresh = () => fetchEntries();
+    window.addEventListener("refreshEntries", handleRefresh);
+
+    // Cleanup
+    return () => window.removeEventListener("refreshEntries", handleRefresh);
   }, []);
 
   const handleSort = (key) => {
@@ -108,8 +115,12 @@ function BeanLog({ onEdit }) {
     );
   };
 
+  const handleFormSuccess = () => {
+    fetchEntries();
+  };
+
   return (
-    <div className="flex flex-col h-full border border-gray-200 shadow-sm mb-16">
+    <div className="flex flex-col h-full border border-gray-200 shadow-sm mb-16 rounded overflow-hidden">
       {entries.length === 0 ? (
         <EmptyState />
       ) : (
@@ -120,10 +131,10 @@ function BeanLog({ onEdit }) {
                 {renderSortableHeader("date", "Date")}
                 {renderSortableHeader("roaster", "Roaster")}
                 {renderSortableHeader("origin", "Origin")}
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
+                <th className="px-6 py-3 w-72 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
                   Aroma
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
+                <th className="px-6 py-3 w-72 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
                   Taste
                 </th>
                 {renderSortableHeader("rating", "Rating")}
@@ -157,7 +168,7 @@ function BeanLog({ onEdit }) {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <StarRating rating={entry.rating} readOnly={true} />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 whitespace-nowrap text-right">
                     <Popover className="relative">
                       <PopoverButton
                         className="p-2 bg-white border border-gray-200 shadow-sm hover:bg-gray-100 focus:bg-gray-100 rounded-full focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-blue-500"
@@ -171,13 +182,13 @@ function BeanLog({ onEdit }) {
                       >
                         <Button
                           onClick={() => onEdit(entry)}
-                          className="py-2 px-3 bg-white hover:bg-gray-50 w-full text-left"
+                          className="py-2 px-3 text-sm bg-white hover:bg-gray-50 w-full text-left"
                         >
                           Edit
                         </Button>
                         <Button
                           onClick={() => handleDelete(entry)}
-                          className="py-2 px-3 bg-white hover:bg-gray-50 w-full text-left text-red-500"
+                          className="py-2 px-3 text-sm bg-white hover:bg-gray-50 w-full text-left text-red-600"
                         >
                           Delete
                         </Button>
